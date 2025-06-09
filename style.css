@@ -1,35 +1,35 @@
 /* -- Root Variables for Theming -- */
 :root {
-    /* Light Mode Colors */
-    --background-color: #f0f2f5;
+    /* Light Mode Colors - Base for Morphglass */
+    --background-color: #e0f2f7; /* Softer, light blue-ish background for blur effect */
     --text-color: #333;
-    --header-bg: #007bff;
+    --header-bg: rgba(0, 123, 255, 0.7); /* Slightly transparent */
     --header-text: white;
-    --tab-bg: #e9ecef;
+    --tab-bg: rgba(255, 255, 255, 0.3); /* Transparent white */
     --tab-button-bg: transparent;
     --tab-button-text: #495057;
-    --tab-button-hover-bg: #dee2e6;
-    --tab-button-active-bg: #ffffff;
+    --tab-button-hover-bg: rgba(255, 255, 255, 0.4);
+    --tab-button-active-bg: rgba(255, 255, 255, 0.6);
     --tab-button-active-border: #007bff;
-    --content-bg: #ffffff;
-    --card-bg: #ffffff;
-    --card-border: #e0e0e0;
-    --card-shadow: rgba(0,0,0,0.08);
-    --form-section-bg: #fdfdfd;
-    --form-section-border: #e0e0e0;
-    --input-border: #ced4da;
+    --content-bg: rgba(255, 255, 255, 0.4); /* Main content area as glass */
+    --card-bg: rgba(255, 255, 255, 0.3); /* Card background as glass */
+    --card-border: rgba(255, 255, 255, 0.5); /* Lighter, more subtle border */
+    --card-shadow: rgba(0,0,0,0.1);
+    --form-section-bg: rgba(255, 255, 255, 0.2); /* Form sections slightly more transparent */
+    --form-section-border: rgba(255, 255, 255, 0.3);
+    --input-border: rgba(206, 212, 218, 0.6);
     --input-focus-shadow: rgba(0,123,255,.25);
-    --button-primary-bg: #007bff;
+    --button-primary-bg: #007bff; /* Buttons remain solid for contrast */
     --button-primary-text: white;
     --button-primary-hover-bg: #0056b3;
     --button-shadow: rgba(0,123,255,0.2);
     --button-delete-bg: #dc3545;
     --button-delete-hover-bg: #c82333;
-    --modal-bg: rgba(0,0,0,0.6);
-    --modal-content-bg: #fefefe;
+    --modal-bg: rgba(0,0,0,0.4); /* Darker overlay for modal */
+    --modal-content-bg: rgba(255, 255, 255, 0.7); /* Modal content as glass */
     --modal-text: #333;
-    --modal-canvas-border: #eee;
-    --polar-line-color: #e0e0e0;
+    --modal-canvas-border: rgba(255, 255, 255, 0.6);
+    --polar-line-color: rgba(0, 0, 0, 0.3);
     --polar-spoke-color: #555;
     --polar-fill-color: rgba(0, 123, 255, 0.3);
     --polar-outline-color: #007bff;
@@ -38,27 +38,31 @@
     --form-header-color: #2c3e50;
     --form-description-color: #6a747b;
     --icon-color: #6c757d;
+
+    /* New colors for status indicators */
+    --status-active-color: #28a745; /* Green */
+    --status-inactive-color: #dc3545; /* Red */
 }
 
 /* -- Dark Mode Colors -- */
 body.dark-mode {
-    --background-color: #2c3e50;
+    --background-color: #1a202c; /* Darker, slightly desaturated background for blur */
     --text-color: #ecf0f1;
-    --header-bg: #1a252f;
+    --header-bg: rgba(26, 32, 44, 0.7);
     --header-text: #ecf0f1;
-    --tab-bg: #34495e;
+    --tab-bg: rgba(68, 77, 88, 0.3); /* Transparent dark for tabs */
     --tab-button-bg: transparent;
     --tab-button-text: #bdc3c7;
-    --tab-button-hover-bg: #495e74;
-    --tab-button-active-bg: #22303c;
+    --tab-button-hover-bg: rgba(68, 77, 88, 0.4);
+    --tab-button-active-bg: rgba(68, 77, 88, 0.6);
     --tab-button-active-border: #3498db;
-    --content-bg: #34495e;
-    --card-bg: #3c526a;
-    --card-border: #4a627c;
+    --content-bg: rgba(68, 77, 88, 0.4); /* Main content area as glass */
+    --card-bg: rgba(68, 77, 88, 0.3); /* Card background as glass */
+    --card-border: rgba(68, 77, 88, 0.5); /* Lighter, more subtle border */
     --card-shadow: rgba(0,0,0,0.2);
-    --form-section-bg: #3a4d60;
-    --form-section-border: #4a627c;
-    --input-border: #5a738a;
+    --form-section-bg: rgba(68, 77, 88, 0.2);
+    --form-section-border: rgba(68, 77, 88, 0.3);
+    --input-border: rgba(90, 115, 138, 0.6);
     --input-focus-shadow: rgba(52,152,219,.25);
     --button-primary-bg: #3498db;
     --button-primary-text: white;
@@ -67,10 +71,10 @@ body.dark-mode {
     --button-delete-bg: #e74c3c;
     --button-delete-hover-bg: #c0392b;
     --modal-bg: rgba(0,0,0,0.8);
-    --modal-content-bg: #3c526a;
+    --modal-content-bg: rgba(68, 77, 88, 0.7); /* Modal content as glass */
     --modal-text: #ecf0f1;
-    --modal-canvas-border: #4a627c;
-    --polar-line-color: #6a747b;
+    --modal-canvas-border: rgba(68, 77, 88, 0.6);
+    --polar-line-color: rgba(255, 255, 255, 0.3);
     --polar-spoke-color: #bdc3c7;
     --polar-fill-color: rgba(52, 152, 219, 0.3);
     --polar-outline-color: #3498db;
@@ -79,6 +83,10 @@ body.dark-mode {
     --form-header-color: #ecf0f1;
     --form-description-color: #bdc3c7;
     --icon-color: #bdc3c7;
+
+    /* New colors for status indicators (dark mode) */
+    --status-active-color: #2ecc71; /* Slightly brighter green for dark mode */
+    --status-inactive-color: #e74c3c; /* Red */
 }
 
 /* -- Base Styles -- */
@@ -91,6 +99,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Optional: Add a subtle background gradient for better blur effect */
+    background-image: linear-gradient(135deg, var(--background-color) 0%, var(--tab-bg) 100%);
 }
 
 header {
@@ -98,8 +108,11 @@ header {
     color: var(--header-text);
     padding: 1.5em 1em;
     text-align: center;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 3px 15px var(--card-shadow);
     position: relative;
+    backdrop-filter: blur(8px); /* Apply blur to header */
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    border-bottom: 1px solid var(--card-border); /* Subtle border */
 }
 
 .header-content {
@@ -160,7 +173,9 @@ h2 i, h3 i, h4 i {
     padding: 0.5em 0;
     border-bottom: 1px solid var(--tab-button-hover-bg);
     flex-wrap: wrap;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px var(--card-shadow);
+    backdrop-filter: blur(5px); /* Apply blur to tabs */
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .tab-button {
@@ -198,7 +213,7 @@ h2 i, h3 i, h4 i {
     border-bottom: 3px solid var(--tab-button-active-border);
     color: var(--tab-button-active-border);
     font-weight: bold;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 -2px 10px var(--card-shadow);
 }
 .tab-button.active i {
     color: var(--tab-button-active-border);
@@ -208,12 +223,15 @@ h2 i, h3 i, h4 i {
 /* -- Tab Content -- */
 .tab-content-container {
     padding: 25px;
-    background-color: var(--content-bg);
+    background-color: var(--content-bg); /* Main content area as glass */
     margin: 20px auto;
     max-width: 950px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px var(--card-shadow);
+    border-radius: 15px; /* Slightly more rounded corners */
+    box-shadow: 0 8px 25px var(--card-shadow); /* Stronger shadow */
     animation: fadeIn 0.5s ease-out;
+    backdrop-filter: blur(10px); /* Apply blur to main content */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--card-border); /* Subtle border for glass effect */
 }
 
 @keyframes fadeIn {
@@ -283,11 +301,11 @@ h2 i, h3 i, h4 i {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--input-border);
-    border-radius: 6px;
+    border-radius: 8px; /* Slightly more rounded inputs */
     font-size: 1em;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    background-color: var(--content-bg);
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent input background */
     color: var(--text-color);
 }
 
@@ -297,6 +315,7 @@ h2 i, h3 i, h4 i {
     border-color: var(--button-primary-bg);
     box-shadow: 0 0 0 0.2rem var(--input-focus-shadow);
     outline: none;
+    background-color: rgba(255, 255, 255, 0.3); /* Slightly more opaque on focus */
 }
 
 .form-group textarea {
@@ -305,31 +324,32 @@ h2 i, h3 i, h4 i {
 }
 
 button[type="submit"], #perform-search, .gallery-controls button,
-#edit-training-btn, #delete-training-btn, #cancel-edit-btn {
+#edit-training-btn, #delete-training-btn, #cancel-edit-btn, #copy-30-day-data-btn {
     background-color: var(--button-primary-bg);
     color: var(--button-primary-text);
     padding: 12px 25px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px; /* Slightly more rounded buttons */
     cursor: pointer;
     font-size: 1.05em;
     margin-top: 15px;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 8px var(--button-shadow);
+    box-shadow: 0 4px 12px var(--button-shadow); /* Stronger shadow for buttons */
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hover,
-#edit-training-btn:hover {
+#edit-training-btn:hover, #copy-30-day-data-btn:hover {
     background-color: var(--button-primary-hover-bg);
-    transform: translateY(-2px);
+    transform: translateY(-3px); /* More pronounced lift */
+    box-shadow: 0 6px 15px var(--button-shadow);
 }
 
 .delete-button {
     background-color: var(--button-delete-bg);
-    box-shadow: 0 2px 8px rgba(220,53,69,0.2);
+    box-shadow: 0 4px 12px rgba(220,53,69,0.2);
 }
 .delete-button:hover {
     background-color: var(--button-delete-hover-bg);
@@ -337,7 +357,7 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
 
 #cancel-edit-btn {
     background-color: #6c757d;
-    box-shadow: 0 2px 8px rgba(108,117,125,0.2);
+    box-shadow: 0 4px 12px rgba(108,117,125,0.2);
     margin-left: 10px;
 }
 #cancel-edit-btn:hover {
@@ -358,17 +378,22 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     margin-top: 30px;
     padding: 20px;
     background-color: var(--form-section-bg);
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: inset 0 1px 5px rgba(0,0,0,0.03);
+    backdrop-filter: blur(8px); /* Apply blur */
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--form-section-border);
 }
 
 #interactive-polar-diagram {
     flex-shrink: 0;
     background-color: var(--card-bg);
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     border: 1px solid var(--card-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(5px); /* Apply blur */
+    -webkit-backdrop-filter: blur(5px);
 }
 
 
@@ -383,13 +408,15 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
 .polar-section {
     padding: 12px;
     border: 1px solid var(--form-section-border);
-    border-radius: 8px;
-    background-color: var(--card-bg);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly more transparent than cards */
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(3px); /* Subtle blur for individual sections */
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .polar-section label {
@@ -404,9 +431,9 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     -webkit-appearance: none;
     appearance: none;
     height: 8px;
-    background: var(--input-border);
+    background: rgba(206, 212, 218, 0.5); /* Transparent track */
     outline: none;
-    opacity: 0.7;
+    opacity: 0.9; /* Make track slightly more opaque */
     transition: opacity .2s;
     border-radius: 5px;
     margin-right: 10px;
@@ -416,21 +443,21 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
 .polar-section input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 22px; /* Slightly larger thumb */
+    height: 22px; /* Slightly larger thumb */
     border-radius: 50%;
     background: var(--button-primary-bg);
     cursor: pointer;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    box-shadow: 0 0 0 4px rgba(0,123,255,0.3); /* Stronger shadow for thumb */
 }
 
 .polar-section input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: var(--button-primary-bg);
     cursor: pointer;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    box-shadow: 0 0 0 4px rgba(0,123,255,0.3);
 }
 
 .polar-section .range-value {
@@ -454,11 +481,11 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     margin-top: 25px;
 }
 
-.training-card {
+.training-card, .event-card { /* Combined styling for cards */
     border: 1px solid var(--card-border);
-    border-radius: 10px;
+    border-radius: 15px; /* More rounded corners */
     padding: 20px;
-    box-shadow: 0 4px 12px var(--card-shadow);
+    box-shadow: 0 6px 18px var(--card-shadow); /* Stronger shadow */
     background-color: var(--card-bg);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
@@ -466,21 +493,23 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     flex-direction: column;
     align-items: center;
     text-align: center;
+    backdrop-filter: blur(8px); /* Apply blur to cards */
+    -webkit-backdrop-filter: blur(8px);
 }
 
-.training-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.training-card:hover, .event-card:hover { /* Combined hover for cards */
+    transform: translateY(-8px); /* More pronounced lift */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18); /* Even stronger shadow on hover */
 }
 
-.training-card h3 {
+.training-card h3, .event-card h3 { /* Combined h3 for cards */
     margin-top: 0;
     margin-bottom: 10px;
-    color: var(--button-primary-bg);
+    color: var(--form-header-color); /* Adjusted to blend better with glass */
     font-size: 1.3em;
 }
 
-.training-card p {
+.training-card p, .event-card p { /* Combined p for cards */
     font-size: 0.95em;
     color: var(--text-color);
     margin-bottom: 15px;
@@ -490,10 +519,40 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     max-width: 100%;
     height: auto;
     border: 1px dashed var(--polar-line-color);
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: var(--form-section-bg);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+
+/* Event Card Specifics */
+.event-card {
+    text-align: left;
+    align-items: flex-start;
+    padding: 18px 25px; /* Slightly more padding */
+}
+.event-card h3 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: var(--form-header-color);
+}
+.event-card p {
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+.event-card p strong {
+    color: var(--form-header-color); /* Adjusted for better glass contrast */
+}
+.event-card .delete-event-btn {
+    background-color: var(--button-delete-bg);
+    box-shadow: none;
+    font-size: 0.85em;
+    padding: 8px 15px; /* Slightly more padding */
+    border-radius: 6px;
+}
+.event-card .delete-event-btn:hover {
+    background-color: var(--button-delete-hover-bg);
+}
+
 
 /* -- Gallery Controls -- */
 .gallery-controls {
@@ -530,17 +589,19 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: var(--modal-bg);
+    background-color: var(--modal-bg); /* Darker, semi-transparent overlay */
     justify-content: center;
     align-items: center;
     padding: 20px;
+    backdrop-filter: blur(10px); /* Apply blur to the background behind the modal */
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .modal-content {
-    background-color: var(--modal-content-bg);
+    background-color: var(--modal-content-bg); /* Modal content as glass */
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    border-radius: 20px; /* Even more rounded for modal */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Stronger shadow for modal */
     max-width: 700px;
     width: 95%;
     position: relative;
@@ -550,6 +611,9 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-y: auto;
     max-height: 90vh;
+    backdrop-filter: blur(15px); /* Stronger blur for modal content itself */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.7); /* Clearer border for modal */
 }
 
 @keyframes zoomIn {
@@ -558,7 +622,7 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
 }
 
 .modal-content h3 {
-    color: var(--button-primary-bg);
+    color: var(--form-header-color); /* Adjusted for better glass contrast */
     margin-bottom: 20px;
     font-size: 1.8em;
 }
@@ -567,11 +631,13 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     max-width: 100%;
     height: auto;
     border: 1px solid var(--modal-canvas-border);
-    border-radius: 8px;
+    border-radius: 10px;
     display: block;
     margin: 0 auto 25px auto;
-    background-color: var(--card-bg);
+    background-color: rgba(255, 255, 255, 0.2); /* Canvas background as part of glass */
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(5px); /* Apply blur */
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .modal-details {
@@ -623,8 +689,8 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     font-size: 38px;
     font-weight: bold;
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 15px; /* Adjust position for larger modal border-radius */
+    right: 25px; /* Adjust position for larger modal border-radius */
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -634,7 +700,80 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     color: var(--button-delete-bg);
 }
 
-/* -- Mobile Optimizations -- */
+/* --- New Styles for Events and Analysis --- */
+
+/* Next Event Countdown Bar */
+.next-event-countdown-bar {
+    background-color: var(--header-bg); /* Uses header glass style */
+    color: var(--header-text);
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    box-shadow: 0 2px 8px var(--card-shadow);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    border-radius: 10px; /* Slightly more rounded */
+    backdrop-filter: blur(6px); /* Apply blur */
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid var(--card-border);
+}
+.next-event-countdown-bar span {
+    white-space: nowrap;
+}
+
+/* Analysis Section Styles */
+.analysis-section {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 15px; /* More rounded */
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px var(--card-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(8px); /* Apply blur */
+    -webkit-backdrop-filter: blur(8px);
+}
+.analysis-section h3 {
+    margin-top: 0;
+    font-size: 1.4em;
+    color: var(--form-header-color);
+}
+.analysis-section p {
+    font-size: 1em;
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.activity-status-display {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 10px; /* More rounded */
+    background-color: rgba(255, 255, 255, 0.25); /* Slightly transparent */
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(4px); /* Subtle blur */
+    -webkit-backdrop-filter: blur(4px);
+}
+.activity-status-display i {
+    font-size: 1.8em;
+}
+.activity-status-display.active-status {
+    color: var(--status-active-color);
+}
+.activity-status-display.inactive-status {
+    color: var(--status-inactive-color);
+}
+
+/* Mobile Optimizations */
 @media (max-width: 768px) {
     header h1 {
         font-size: 1.6em;
@@ -647,6 +786,7 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     .tab-content-container {
         margin: 10px;
         padding: 15px;
+        border-radius: 10px;
     }
 
     .tabs {
@@ -684,23 +824,26 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
         grid-template-columns: 1fr;
     }
 
-    .training-card {
+    .training-card, .event-card {
         padding: 15px;
+        border-radius: 10px;
     }
 
     .form-group input, .form-group select, .form-group textarea {
         width: calc(100% - 20px);
         padding: 10px;
+        border-radius: 6px;
     }
 
     .modal-content {
         padding: 20px;
+        border-radius: 15px;
     }
 
     .close-button {
         font-size: 30px;
-        top: 5px;
-        right: 10px;
+        top: 10px;
+        right: 15px;
     }
 
     .modal-details h4 {
@@ -708,5 +851,16 @@ button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hov
     }
     .modal-details p {
         font-size: 0.9em;
+    }
+
+    .next-event-countdown-bar {
+        flex-direction: column;
+        gap: 5px;
+        font-size: 1em;
+        border-radius: 8px;
+    }
+
+    .activity-status-display {
+        border-radius: 8px;
     }
 }
