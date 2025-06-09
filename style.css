@@ -1,0 +1,712 @@
+/* -- Root Variables for Theming -- */
+:root {
+    /* Light Mode Colors */
+    --background-color: #f0f2f5;
+    --text-color: #333;
+    --header-bg: #007bff;
+    --header-text: white;
+    --tab-bg: #e9ecef;
+    --tab-button-bg: transparent;
+    --tab-button-text: #495057;
+    --tab-button-hover-bg: #dee2e6;
+    --tab-button-active-bg: #ffffff;
+    --tab-button-active-border: #007bff;
+    --content-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-border: #e0e0e0;
+    --card-shadow: rgba(0,0,0,0.08);
+    --form-section-bg: #fdfdfd;
+    --form-section-border: #e0e0e0;
+    --input-border: #ced4da;
+    --input-focus-shadow: rgba(0,123,255,.25);
+    --button-primary-bg: #007bff;
+    --button-primary-text: white;
+    --button-primary-hover-bg: #0056b3;
+    --button-shadow: rgba(0,123,255,0.2);
+    --button-delete-bg: #dc3545;
+    --button-delete-hover-bg: #c82333;
+    --modal-bg: rgba(0,0,0,0.6);
+    --modal-content-bg: #fefefe;
+    --modal-text: #333;
+    --modal-canvas-border: #eee;
+    --polar-line-color: #e0e0e0;
+    --polar-spoke-color: #555;
+    --polar-fill-color: rgba(0, 123, 255, 0.3);
+    --polar-outline-color: #007bff;
+    --polar-point-color: #0056b3;
+    --empty-message-color: #6c757d;
+    --form-header-color: #2c3e50;
+    --form-description-color: #6a747b;
+    --icon-color: #6c757d;
+}
+
+/* -- Dark Mode Colors -- */
+body.dark-mode {
+    --background-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --header-bg: #1a252f;
+    --header-text: #ecf0f1;
+    --tab-bg: #34495e;
+    --tab-button-bg: transparent;
+    --tab-button-text: #bdc3c7;
+    --tab-button-hover-bg: #495e74;
+    --tab-button-active-bg: #22303c;
+    --tab-button-active-border: #3498db;
+    --content-bg: #34495e;
+    --card-bg: #3c526a;
+    --card-border: #4a627c;
+    --card-shadow: rgba(0,0,0,0.2);
+    --form-section-bg: #3a4d60;
+    --form-section-border: #4a627c;
+    --input-border: #5a738a;
+    --input-focus-shadow: rgba(52,152,219,.25);
+    --button-primary-bg: #3498db;
+    --button-primary-text: white;
+    --button-primary-hover-bg: #2980b9;
+    --button-shadow: rgba(52,152,219,0.2);
+    --button-delete-bg: #e74c3c;
+    --button-delete-hover-bg: #c0392b;
+    --modal-bg: rgba(0,0,0,0.8);
+    --modal-content-bg: #3c526a;
+    --modal-text: #ecf0f1;
+    --modal-canvas-border: #4a627c;
+    --polar-line-color: #6a747b;
+    --polar-spoke-color: #bdc3c7;
+    --polar-fill-color: rgba(52, 152, 219, 0.3);
+    --polar-outline-color: #3498db;
+    --polar-point-color: #2980b9;
+    --empty-message-color: #95a5a6;
+    --form-header-color: #ecf0f1;
+    --form-description-color: #bdc3c7;
+    --icon-color: #bdc3c7;
+}
+
+/* -- Base Styles -- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+    padding: 1.5em 1em;
+    text-align: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: var(--header-text);
+    flex-grow: 1;
+}
+
+.theme-toggle-button {
+    background: none;
+    border: 2px solid var(--header-text);
+    color: var(--header-text);
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.theme-toggle-button:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+h2, h3, h4 {
+    color: var(--form-header-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+h2 i, h3 i, h4 i {
+    color: var(--icon-color);
+    font-size: 0.8em;
+}
+
+/* -- Tab Navigation -- */
+.tabs {
+    display: flex;
+    justify-content: center;
+    background-color: var(--tab-bg);
+    padding: 0.5em 0;
+    border-bottom: 1px solid var(--tab-button-hover-bg);
+    flex-wrap: wrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.tab-button {
+    padding: 12px 25px;
+    border: none;
+    background-color: var(--tab-button-bg);
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 6px 6px 0 0;
+    color: var(--tab-button-text);
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab-button i {
+    color: var(--icon-color);
+    transition: color 0.3s ease;
+}
+
+.tab-button:hover {
+    background-color: var(--tab-button-hover-bg);
+    color: var(--tab-button-active-border);
+}
+.tab-button:hover i {
+    color: var(--tab-button-active-border);
+}
+
+
+.tab-button.active {
+    background-color: var(--tab-button-active-bg);
+    border-bottom: 3px solid var(--tab-button-active-border);
+    color: var(--tab-button-active-border);
+    font-weight: bold;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+}
+.tab-button.active i {
+    color: var(--tab-button-active-border);
+}
+
+
+/* -- Tab Content -- */
+.tab-content-container {
+    padding: 25px;
+    background-color: var(--content-bg);
+    margin: 20px auto;
+    max-width: 950px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--card-shadow);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* -- Form Styling -- */
+.form-section-header {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--form-header-color);
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--form-section-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.form-section-header i {
+    color: var(--icon-color);
+}
+
+.form-description {
+    font-size: 0.9em;
+    color: var(--form-description-color);
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label i {
+    color: var(--icon-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    background-color: var(--content-bg);
+    color: var(--text-color);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--button-primary-bg);
+    box-shadow: 0 0 0 0.2rem var(--input-focus-shadow);
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+button[type="submit"], #perform-search, .gallery-controls button,
+#edit-training-btn, #delete-training-btn, #cancel-edit-btn {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.05em;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px var(--button-shadow);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button[type="submit"]:hover, #perform-search:hover, .gallery-controls button:hover,
+#edit-training-btn:hover {
+    background-color: var(--button-primary-hover-bg);
+    transform: translateY(-2px);
+}
+
+.delete-button {
+    background-color: var(--button-delete-bg);
+    box-shadow: 0 2px 8px rgba(220,53,69,0.2);
+}
+.delete-button:hover {
+    background-color: var(--button-delete-hover-bg);
+}
+
+#cancel-edit-btn {
+    background-color: #6c757d;
+    box-shadow: 0 2px 8px rgba(108,117,125,0.2);
+    margin-left: 10px;
+}
+#cancel-edit-btn:hover {
+    background-color: #5a6268;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* -- Interactive Polar Diagram Container -- */
+.polar-diagram-interactive-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--form-section-bg);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 5px rgba(0,0,0,0.03);
+}
+
+#interactive-polar-diagram {
+    flex-shrink: 0;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid var(--card-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+
+/* -- Polar Diagram Input Grid (Sliders) -- */
+.polar-diagram-input-grid {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.polar-section {
+    padding: 12px;
+    border: 1px solid var(--form-section-border);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.polar-section label {
+    font-size: 0.95em;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.polar-section input[type="range"] {
+    width: calc(100% - 40px);
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: var(--input-border);
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 5px;
+    margin-right: 10px;
+    flex-grow: 1;
+}
+
+.polar-section input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--button-primary-bg);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+}
+
+.polar-section input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--button-primary-bg);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+}
+
+.polar-section .range-value {
+    font-weight: bold;
+    color: var(--button-primary-bg);
+    min-width: 25px;
+    text-align: right;
+}
+
+.polar-section > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* -- Gallery Grid -- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.training-card {
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px var(--card-shadow);
+    background-color: var(--card-bg);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.training-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.training-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--button-primary-bg);
+    font-size: 1.3em;
+}
+
+.training-card p {
+    font-size: 0.95em;
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.training-card canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px dashed var(--polar-line-color);
+    border-radius: 5px;
+    background-color: var(--form-section-bg);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* -- Gallery Controls -- */
+.gallery-controls {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* -- Search Input Group -- */
+.search-input-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+.search-input-group input {
+    flex-grow: 1;
+    min-width: 200px;
+}
+.search-input-group button {
+    margin-top: 0;
+}
+
+
+/* -- Modal Styling -- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-bg);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: var(--modal-content-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    max-width: 700px;
+    width: 95%;
+    position: relative;
+    text-align: center;
+    animation: zoomIn 0.3s ease-out;
+    color: var(--modal-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h3 {
+    color: var(--button-primary-bg);
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.modal-content canvas {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--modal-canvas-border);
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 25px auto;
+    background-color: var(--card-bg);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.modal-details {
+    text-align: left;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-border);
+}
+
+.modal-details h4 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: var(--form-header-color);
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.modal-details h4 i {
+    color: var(--icon-color);
+}
+
+.modal-details p {
+    margin-bottom: 8px;
+    font-size: 1em;
+}
+.modal-details p strong {
+    color: var(--text-color);
+}
+
+.modal-details p span {
+    color: var(--text-color);
+}
+
+.modal-details p:last-child {
+    margin-bottom: 0;
+}
+
+.modal-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.close-button {
+    color: var(--text-color);
+    font-size: 38px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--button-delete-bg);
+}
+
+/* -- Mobile Optimizations -- */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.6em;
+    }
+    .theme-toggle-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1em;
+    }
+    .tab-content-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tab-button {
+        margin: 2px 0;
+        border-radius: 0;
+        justify-content: center;
+    }
+
+    .tab-button.active {
+        border-bottom: none;
+        border-left: 3px solid var(--tab-button-active-border);
+        box-shadow: none;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .polar-diagram-interactive-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #interactive-polar-diagram {
+        max-width: 280px;
+        height: 280px;
+    }
+
+    .polar-diagram-input-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .training-card {
+        padding: 15px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .close-button {
+        font-size: 30px;
+        top: 5px;
+        right: 10px;
+    }
+
+    .modal-details h4 {
+        font-size: 1.1em;
+    }
+    .modal-details p {
+        font-size: 0.9em;
+    }
+}

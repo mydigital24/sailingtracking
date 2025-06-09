@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segeltraining Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Segeltraining Tracker</h1>
+            <button id="theme-toggle" class="theme-toggle-button" aria-label="Toggle dark/light mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-button active" data-tab="entry">
+            <i class="fas fa-plus-circle"></i> Eintragen
+        </button>
+        <button class="tab-button" data-tab="gallery">
+            <i class="fas fa-compass"></i> Galerie
+        </button>
+        <button class="tab-button" data-tab="search">
+            <i class="fas fa-search"></i> Suche
+        </button>
+    </nav>
+
+    <main class="tab-content-container">
+        <section id="entry" class="tab-content active">
+            <h2>Neues Training eintragen</h2>
+            <form id="training-entry-form">
+                <input type="hidden" id="training-id">
+
+                <div class="form-section-header">Allgemeine Informationen</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="training-date"><i class="fas fa-calendar-alt"></i> Datum:</label>
+                        <input type="date" id="training-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="training-title"><i class="fas fa-heading"></i> Titel des Trainings:</label>
+                        <input type="text" id="training-title" placeholder="z.B. Starkwindtraining Kiel" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location"><i class="fas fa-map-marker-alt"></i> Ort:</label>
+                        <input type="text" id="location" placeholder="z.B. Kieler Förde">
+                    </div>
+                    <div class="form-group">
+                        <label for="sail-hours"><i class="fas fa-clock"></i> Gesegelte Stunden:</label>
+                        <input type="number" id="sail-hours" min="0" step="0.5" value="0">
+                    </div>
+                </div>
+
+                <div class="form-section-header">Wetter & Bedingungen</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="wind-direction"><i class="fas fa-wind"></i> Windrichtung:</label>
+                        <select id="wind-direction">
+                            <option value="">Wählen...</option>
+                            <option value="N">Nord</option>
+                            <option value="NE">Nordost</option>
+                            <option value="E">Ost</option>
+                            <option value="SE">Südost</option>
+                            <option value="S">Süd</option>
+                            <option value="SW">Südwest</option>
+                            <option value="W">West</option>
+                            <option value="NW">Nordwest</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="wind-strength"><i class="fas fa-wind"></i> Windstärke (Bft):</label>
+                        <input type="number" id="wind-strength" min="0" max="12" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="sea-state"><i class="fas fa-water"></i> Seegang:</label>
+                        <select id="sea-state">
+                            <option value="">Wählen...</option>
+                            <option value="glatt">Glatt</option>
+                            <option value="leicht-bewegt">Leicht bewegt</option>
+                            <option value="maessig">Mäßig</option>
+                            <option value="grob">Grob</option>
+                            <option value="sehr-grob">Sehr grob</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="conditions"><i class="fas fa-cloud"></i> Bedingungen vor Ort:</label>
+                        <input type="text" id="conditions" placeholder="z.B. Sonnig, Bewölkt, Regen">
+                    </div>
+                </div>
+
+                <div class="form-section-header">Bootssetup</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sail-setup"><i class="fas fa-flag"></i> Segel:</label>
+                        <input type="text" id="sail-setup" placeholder="z.B. Genua 1, Großsegel">
+                    </div>
+                    <div class="form-group">
+                        <label for="mast-rake"><i class="fas fa-ship"></i> Mastfall:</label>
+                        <input type="text" id="mast-rake" placeholder="z.B. 1° achtern">
+                    </div>
+                    <div class="form-group">
+                        <label for="luff-tension"><i class="fas fa-rope"></i> Vorliekspannung:</label>
+                        <input type="text" id="luff-tension" placeholder="z.B. Mittel, Hart">
+                    </div>
+                    <div class="form-group">
+                        <label for="foot-tension"><i class="fas fa-rope"></i> Unterliekstrecker:</label>
+                        <input type="text" id="foot-tension" placeholder="z.B. Angezogen, Locker">
+                    </div>
+                </div>
+
+                <div class="form-section-header">Leistungsdaten</div>
+                 <div class="form-grid">
+                    <div class="form-group">
+                        <label for="speed"><i class="fas fa-tachometer-alt"></i> Geschwindigkeit (kn):</label>
+                        <input type="number" id="speed" min="0" step="0.1" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="performance"><i class="fas fa-chart-line"></i> Leistung (relativ):</label>
+                        <input type="number" id="performance" min="0" max="10" step="1" value="0">
+                    </div>
+                </div>
+
+                <div class="form-section-header">Polardiagramm Zielvorgaben</div>
+                <p class="form-description">Bewerten Sie Ihre Leistung (0-10) in jedem Bereich. Das Diagramm wird automatisch aktualisiert.</p>
+                <div class="polar-diagram-interactive-container">
+                    <canvas id="interactive-polar-diagram" width="300" height="300"></canvas>
+                    <div class="polar-diagram-input-grid">
+                        <div class="polar-section">
+                            <label for="amwind-geschwindigkeit">Amwind-Geschwindigkeit:</label>
+                            <div><input type="range" id="amwind-geschwindigkeit" min="0" max="10" value="0"><span class="range-value" data-target="amwind-geschwindigkeit">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="vorwind-geschwindigkeit">Vorwind-Geschwindigkeit:</label>
+                            <div><input type="range" id="vorwind-geschwindigkeit" min="0" max="10" value="0"><span class="range-value" data-target="vorwind-geschwindigkeit">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="wenden">Wenden:</label>
+                            <div><input type="range" id="wenden" min="0" max="10" value="0"><span class="range-value" data-target="wenden">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="halsen">Halsen:</label>
+                            <div><input type="range" id="halsen" min="0" max="10" value="0"><span class="range-value" data-target="halsen">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="start">Start:</label>
+                            <div><input type="range" id="start" min="0" max="10" value="0"><span class="range-value" data-target="start">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="taktik-amwindschenkel">Taktik Amwindschenkel:</label>
+                            <div><input type="range" id="taktik-amwindschenkel" min="0" max="10" value="0"><span class="range-value" data-target="taktik-amwindschenkel">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="taktik-vorwindschenkel">Taktik Vorwindschenkel:</label>
+                            <div><input type="range" id="taktik-vorwindschenkel" min="0" max="10" value="0"><span class="range-value" data-target="taktik-vorwindschenkel">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="runden-der-bojen">Runden der Bojen:</label>
+                            <div><input type="range" id="runden-der-bojen" min="0" max="10" value="0"><span class="range-value" data-target="runden-der-bojen">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="zielspurt">Zielspurt:</label>
+                            <div><input type="range" id="zielspurt" min="0" max="10" value="0"><span class="range-value" data-target="zielspurt">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="mentale-staerke">Mentale Stärke:</label>
+                            <div><input type="range" id="mentale-staerke" min="0" max="10" value="0"><span class="range-value" data-target="mentale-staerke">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="physische-fitness">Physische Fitness:</label>
+                            <div><input type="range" id="physische-fitness" min="0" max="10" value="0"><span class="range-value" data-target="physische-fitness">0</span></div>
+                        </div>
+                        <div class="polar-section">
+                            <label for="ruhe-und-selbstvertrauen">Ruhe und Selbstvertrauen:</label>
+                            <div><input type="range" id="ruhe-und-selbstvertrauen" min="0" max="10" value="0"><span class="range-value" data-target="ruhe-und-selbstvertrauen">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section-header">Ziele & Reflexion</div>
+                <div class="form-group">
+                    <label for="exercises"><i class="fas fa-dumbbell"></i> Übungen gemacht:</label>
+                    <textarea id="exercises" rows="3" placeholder="Welche Übungen wurden gemacht?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="goals"><i class="fas fa-bullseye"></i> Ziele für dieses Training:</label>
+                    <textarea id="goals" rows="3" placeholder="Was waren die Ziele für diese Einheit?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="what-learned"><i class="fas fa-lightbulb"></i> Was hast du gemacht/gelernt?:</label>
+                    <textarea id="what-learned" rows="5" placeholder="Beschreibe, was du während des Trainings gemacht und gelernt hast."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="next-steps"><i class="fas fa-forward"></i> Was musst du als nächstes machen?:</label>
+                    <textarea id="next-steps" rows="5" placeholder="Definiere die nächsten Schritte oder Trainingsziele."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes"><i class="fas fa-sticky-note"></i> Zusätzliche Notizen:</label>
+                    <textarea id="notes" rows="5" placeholder="Weitere allgemeine Notizen."></textarea>
+                </div>
+
+                <button type="submit" id="save-training-btn"><i class="fas fa-save"></i> Training speichern</button>
+                <button type="button" id="cancel-edit-btn" class="hidden"><i class="fas fa-times-circle"></i> Bearbeitung abbrechen</button>
+            </form>
+        </section>
+
+        <section id="gallery" class="tab-content">
+            <h2>Vergangene Trainings</h2>
+            <div id="training-list" class="gallery-grid">
+                </div>
+            <div class="gallery-controls">
+                <button id="export-data"><i class="fas fa-file-export"></i> Daten exportieren</button>
+                <input type="file" id="import-data" accept=".json" style="display: none;">
+                <button onclick="document.getElementById('import-data').click()"><i class="fas fa-file-import"></i> Daten importieren</button>
+            </div>
+        </section>
+
+        <section id="search" class="tab-content">
+            <h2>Trainings durchsuchen</h2>
+            <div class="form-group search-input-group">
+                <label for="search-input"><i class="fas fa-search"></i> Suchbegriff:</label>
+                <input type="text" id="search-input" placeholder="Titel, Notizen, Ort, Datum...">
+                <button id="perform-search"><i class="fas fa-search"></i> Suchen</button>
+            </div>
+
+            <div id="search-results" class="gallery-grid">
+                </div>
+        </section>
+    </main>
+
+    <div id="diagram-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" aria-label="Close modal">&times;</span>
+            <h3 id="modal-title-date"></h3>
+            <canvas id="enlarged-diagram-canvas" width="400" height="400"></canvas>
+            <div class="modal-details">
+                <h4><i class="fas fa-info-circle"></i> Allgemeine Details</h4>
+                <p><strong>Ort:</strong> <span id="modal-location"></span></p>
+                <p><strong>Gesegelte Stunden:</strong> <span id="modal-sail-hours"></span></p>
+                <p><strong>Wind:</strong> <span id="modal-wind"></span></p>
+                <p><strong>Seegang:</strong> <span id="modal-sea-state"></span></p>
+                <p><strong>Bedingungen:</strong> <span id="modal-conditions"></span></p>
+
+                <h4><i class="fas fa-ship"></i> Boots-Setup</h4>
+                <p><strong>Segel:</strong> <span id="modal-sail-setup"></span></p>
+                <p><strong>Mastfall:</strong> <span id="modal-mast-rake"></span></p>
+                <p><strong>Vorliekspannung:</strong> <span id="modal-luff-tension"></span></p>
+                <p><strong>Unterliekstrecker:</strong> <span id="modal-foot-tension"></span></p>
+
+                <h4><i class="fas fa-chart-line"></i> Leistungsdaten</h4>
+                <p><strong>Geschwindigkeit:</strong> <span id="modal-speed"></span> kn</p>
+                <p><strong>Leistung:</strong> <span id="modal-performance"></span> / 10</p>
+
+                <h4><i class="fas fa-dumbbell"></i> Übungen gemacht</h4>
+                <p id="modal-exercises"></p>
+
+                <h4><i class="fas fa-bullseye"></i> Ziele für dieses Training</h4>
+                <p id="modal-goals"></p>
+
+                <h4><i class="fas fa-lightbulb"></i> Was gemacht/gelernt wurde</h4>
+                <p id="modal-what-learned"></p>
+
+                <h4><i class="fas fa-forward"></i> Nächste Schritte</h4>
+                <p id="modal-next-steps"></p>
+
+                <h4><i class="fas fa-sticky-note"></i> Zusätzliche Notizen</h4>
+                <p id="modal-notes"></p>
+            </div>
+            <div class="modal-actions">
+                <button id="edit-training-btn"><i class="fas fa-edit"></i> Training bearbeiten</button>
+                <button id="delete-training-btn" class="delete-button"><i class="fas fa-trash-alt"></i> Training löschen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
