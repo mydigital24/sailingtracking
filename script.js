@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTrainingBtn = document.getElementById('edit-training-btn');
     const deleteTrainingBtn = document.getElementById('delete-training-btn');
 
-    // Modal Detail elements
+    // Modal Detail elements (truncated for brevity, ensure all are present)
     const modalLocation = document.getElementById('modal-location');
     const modalSailHours = document.getElementById('modal-sail-hours');
     const modalWind = document.getElementById('modal-wind');
@@ -47,11 +47,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const polarRangeInputs = document.querySelectorAll('.polar-diagram-input-grid input[type="range"]');
     const rangeValueSpans = document.querySelectorAll('.polar-diagram-input-grid .range-value'); // Collection of all range value display spans
 
+    // --- NEW: Event Elements ---
+    const eventEntryForm = document.getElementById('event-entry-form');
+    const eventTitleInput = document.getElementById('event-title');
+    const eventDateInput = document.getElementById('event-date');
+    const eventTimeInput = document.getElementById('event-time');
+    const eventLocationInput = document.getElementById('event-location');
+    const eventsListDiv = document.getElementById('events-list');
+    const noEventsMessage = document.getElementById('no-events-message');
+    const nextEventCountdownBar = document.getElementById('next-event-countdown');
+    const nextEventTitleSpan = document.getElementById('next-event-title');
+    const countdownTimerSpan = document.getElementById('countdown-timer');
+
+    // --- NEW: Analysis Elements ---
+    const activityStatusDiv = document.getElementById('activity-status');
+    const copy30DayDataBtn = document.getElementById('copy-30-day-data-btn');
+
+
     let trainingSessions = []; // Array to store all training data
+    let upcomingEvents = []; // Array to store event data
     let currentTrainingIdForModal = null; // To keep track of which training is open in modal
+    let countdownInterval; // To store the interval for the next event countdown
+
 
     // Define the labels for the polar diagram based on your HTML structure and desired order
-    // THESE MUST MATCH THE IDS IN index.html AND THE DESIRED ORDER FOR DRAWING
     const polarDiagramLabels = [
         "Amwind-Geschwindigkeit",
         "Vorwind-Geschwindigkeit",
@@ -102,13 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.classList.add('fa-moon');
         }
         // Redraw canvases to update colors immediately
-        // This is important because canvas elements don't automatically pick up CSS var changes
         renderTrainingGallery(); // Redraw gallery mini-diagrams
         if (diagramModal.style.display === 'flex' && currentTrainingIdForModal) {
             const currentSession = trainingSessions.find(s => s.id === currentTrainingIdForModal);
             if (currentSession) {
-                 // The modal will be recreated/redrawn if still open and currentTrainingIdForModal is set
-                 // but a direct redraw here is safer
                  const valuesArray = polarDiagramLabels.map(label => {
                      const fieldId = getPolarIdFromLabel(label);
                      return currentSession.polarValues[fieldId] || 0;
@@ -116,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
                  drawPolarDiagram(enlargedDiagramCanvas, valuesArray, polarDiagramLabels);
             }
         }
-        // Redraw interactive diagram on entry page if it's the active tab
         if (document.getElementById('entry').classList.contains('active')) {
              updateInteractivePolarDiagram();
         }
@@ -154,11 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (targetTab === 'search') {
                 searchResultsDiv.innerHTML = ''; // Clear previous search results
                 searchInput.value = ''; // Clear search input
+            } else if (targetTab === 'events') {
+                renderEventsList(); // Render events when the tab is opened
+            } else if (targetTab === 'analysis') {
+                updateActivityStatus(); // Update analysis when the tab is opened
             }
+            updateNextEventCountdown(); // Update countdown every time a tab is switched
         });
     });
 
-    // --- Local Storage Management ---
+    // --- Local Storage Management for Trainings ---
     function saveTrainingSessions() {
         localStorage.setItem('sailingTrainingData', JSON.stringify(trainingSessions));
     }
@@ -170,7 +190,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Polar Diagram Drawing Function ---
+    // --- Local Storage Management for Events ---
+    function saveUpcomingEvents() {
+        localStorage.setItem('sailingUpcomingEvents', JSON.stringify(upcomingEvents));
+    }
+
+    function loadUpcomingEvents() {
+        const data = localStorage.getItem('sailingUpcomingEvents');
+        if (data) {
+            upcomingEvents = JSON.parse(data);
+            // Convert date strings back to Date objects if needed for comparison/sorting
+            upcomingEvents.forEach(event => {
+                if (typeof event.date === 'string') {
+                    event.date = new Date(event.date);
+                }
+            });
+        }
+    }
+
+    // --- Polar Diagram Drawing Function (remains the same) ---
     function drawPolarDiagram(canvas, values, labels) {
         if (!canvas || !canvas.getContext) {
             console.warn("Canvas element not found or not supported.");
@@ -261,7 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const points = [];
         values.forEach((value, index) => {
-            // Ensure value is a number and normalize to 0-1, clamp values
             const normalizedValue = Math.min(Math.max(parseFloat(value) || 0, 0), 10) / 10;
             const pointRadius = baseRadius * normalizedValue;
             const angle = (index * (360 / numSections) - 90) * Math.PI / 180;
@@ -289,33 +326,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Interactive Polar Diagram on Entry Form ---
+    // --- Interactive Polar Diagram on Entry Form (remains the same) ---
     function updateInteractivePolarDiagram() {
         const currentPolarValues = [];
         polarDiagramLabels.forEach(label => {
-            const id = getPolarIdFromLabel(label); // Use helper for consistent ID
+            const id = getPolarIdFromLabel(label);
             const inputElement = document.getElementById(id);
             if (inputElement) {
                 currentPolarValues.push(parseInt(inputElement.value, 10));
-                // Update the numeric value displayed next to the slider
                 const valueSpan = document.querySelector(`.range-value[data-target="${id}"]`);
                 if (valueSpan) {
                     valueSpan.textContent = inputElement.value;
                 }
             } else {
                 console.warn(`Input element with ID '${id}' not found for label '${label}'. Check HTML IDs.`);
-                currentPolarValues.push(0); // Add a default value to prevent drawing errors
+                currentPolarValues.push(0);
             }
         });
         drawPolarDiagram(interactivePolarDiagramCanvas, currentPolarValues, polarDiagramLabels);
     }
 
-    // Attach event listeners to all range inputs for the interactive diagram
     polarRangeInputs.forEach(input => {
         input.addEventListener('input', updateInteractivePolarDiagram);
     });
 
-    // --- Entry Form Submission (Create & Update) ---
+    // --- Entry Form Submission (Create & Update) (remains mostly the same) ---
     trainingEntryForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -323,23 +358,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const trainingDate = document.getElementById('training-date').value;
         const trainingTitle = document.getElementById('training-title').value;
 
-        // Collect all form data including new fields
         const trainingData = {
             id: id,
             date: trainingDate,
             title: trainingTitle,
             location: document.getElementById('location').value,
-            sailHours: parseFloat(document.getElementById('sail-hours').value) || 0, // Ensure number
+            sailHours: parseFloat(document.getElementById('sail-hours').value) || 0,
             windDirection: document.getElementById('wind-direction').value,
-            windStrength: parseInt(document.getElementById('wind-strength').value, 10) || 0, // Ensure number
+            windStrength: parseInt(document.getElementById('wind-strength').value, 10) || 0,
             seaState: document.getElementById('sea-state').value,
             conditions: document.getElementById('conditions').value,
             sailSetup: document.getElementById('sail-setup').value,
             mastRake: document.getElementById('mast-rake').value,
             luffTension: document.getElementById('luff-tension').value,
             footTension: document.getElementById('foot-tension').value,
-            speed: parseFloat(document.getElementById('speed').value) || 0, // Ensure number
-            performance: parseInt(document.getElementById('performance').value, 10) || 0, // Ensure number
+            speed: parseFloat(document.getElementById('speed').value) || 0,
+            performance: parseInt(document.getElementById('performance').value, 10) || 0,
             exercises: document.getElementById('exercises').value,
             goals: document.getElementById('goals').value,
             whatLearned: document.getElementById('what-learned').value,
@@ -349,38 +383,34 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         polarDiagramLabels.forEach(label => {
-            const fieldId = getPolarIdFromLabel(label); // Use helper for consistent ID
+            const fieldId = getPolarIdFromLabel(label);
             const inputElement = document.getElementById(fieldId);
-            trainingData.polarValues[fieldId] = inputElement ? parseInt(inputElement.value, 10) : 0; // Ensure fallback to 0
+            trainingData.polarValues[fieldId] = inputElement ? parseInt(inputElement.value, 10) : 0;
         });
 
-        if (trainingIdInput.value) { // Editing existing training
+        if (trainingIdInput.value) {
             const index = trainingSessions.findIndex(t => t.id === id);
             if (index !== -1) {
                 trainingSessions[index] = trainingData;
                 alert('Training erfolgreich aktualisiert!');
             }
-        } else { // New training
+        } else {
             trainingSessions.push(trainingData);
             alert('Training erfolgreich gespeichert!');
         }
 
         saveTrainingSessions();
-        resetEntryForm(); // Clear form after saving
-        
-        // Programmatically click the Gallery tab button to switch
-        // This will also trigger renderTrainingGallery()
+        resetEntryForm();
         document.querySelector('.tab-button[data-tab="gallery"]').click();
     });
 
-    // --- Reset Entry Form ---
+    // --- Reset Entry Form (remains mostly the same) ---
     function resetEntryForm() {
         trainingEntryForm.reset();
-        trainingIdInput.value = ''; // Clear hidden ID
-        saveTrainingBtn.innerHTML = '<i class="fas fa-save"></i> Training speichern'; // Reset button text
-        cancelEditBtn.classList.add('hidden'); // Hide cancel button
+        trainingIdInput.value = '';
+        saveTrainingBtn.innerHTML = '<i class="fas fa-save"></i> Training speichern';
+        cancelEditBtn.classList.add('hidden');
 
-        // Explicitly set range inputs to 0 and update their value spans
         polarRangeInputs.forEach(input => {
             input.value = 0;
             const valueSpan = document.querySelector(`.range-value[data-target="${input.id}"]`);
@@ -388,14 +418,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 valueSpan.textContent = '0';
             }
         });
-        updateInteractivePolarDiagram(); // Redraw diagram for reset state (all 0s)
+        updateInteractivePolarDiagram();
     }
 
     cancelEditBtn.addEventListener('click', resetEntryForm);
 
-    // --- Gallery Rendering ---
+    // --- Gallery Rendering (remains the same) ---
     function renderTrainingGallery(sessionsToDisplay = trainingSessions, targetDiv = trainingListDiv) {
-        targetDiv.innerHTML = ''; // Clear previous entries
+        targetDiv.innerHTML = '';
 
         if (sessionsToDisplay.length === 0) {
             let message = 'Noch keine Trainings eingetragen. Starte mit dem "Eintragen" Tab!';
@@ -406,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Sort by date descending
         sessionsToDisplay.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         sessionsToDisplay.forEach(session => {
@@ -414,7 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('training-card');
             card.dataset.id = session.id;
 
-            // Display title, date, and mini polar diagram
             card.innerHTML = `
                 <h3>${session.title}</h3>
                 <p>Datum: ${session.date}</p>
@@ -422,10 +450,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             const canvas = card.querySelector('.mini-diagram');
-            // IMPORTANT: Map polarValues from stored object back to an array in the correct order for drawing
             const valuesArray = polarDiagramLabels.map(label => {
                 const fieldId = getPolarIdFromLabel(label);
-                return session.polarValues[fieldId] || 0; // Use 0 if value is missing for any reason
+                return session.polarValues[fieldId] || 0;
             });
             drawPolarDiagram(canvas, valuesArray, polarDiagramLabels);
 
@@ -438,13 +465,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Show Enlarged Diagram / Detailed View Modal ---
+    // --- Show Enlarged Diagram / Detailed View Modal (remains the same) ---
     function showEnlargedDiagram(session) {
-        currentTrainingIdForModal = session.id; // Store ID for edit/delete
+        currentTrainingIdForModal = session.id;
 
         modalTitleDate.textContent = `${session.title} (${session.date})`;
 
-        // Populate modal details, using || 'N/A' for missing data
         modalLocation.textContent = session.location || 'N/A';
         modalSailHours.textContent = session.sailHours !== undefined && session.sailHours !== null ? `${session.sailHours} Std.` : 'N/A';
         modalWind.textContent = `${session.windDirection || 'N/A'} ${session.windStrength !== undefined && session.windStrength !== null ? `(${session.windStrength} Bft)` : ''}`.trim();
@@ -462,40 +488,38 @@ document.addEventListener('DOMContentLoaded', () => {
         modalNextSteps.textContent = session.nextSteps || 'Keine Angaben.';
         modalNotes.textContent = session.notes || 'Keine Notizen vorhanden.';
 
-        // IMPORTANT: Map polarValues from stored object back to an array in the correct order for drawing
         const valuesArray = polarDiagramLabels.map(label => {
             const fieldId = getPolarIdFromLabel(label);
-            return session.polarValues[fieldId] || 0; // Use 0 if value is missing
+            return session.polarValues[fieldId] || 0;
         });
         drawPolarDiagram(enlargedDiagramCanvas, valuesArray, polarDiagramLabels);
 
-        diagramModal.style.display = 'flex'; // Display modal
+        diagramModal.style.display = 'flex';
     }
 
     // Close modal event listeners
     closeModalButton.addEventListener('click', () => {
         diagramModal.style.display = 'none';
-        currentTrainingIdForModal = null; // Clear active training ID
+        currentTrainingIdForModal = null;
     });
 
     window.addEventListener('click', (event) => {
         if (event.target === diagramModal) {
             diagramModal.style.display = 'none';
-            currentTrainingIdForModal = null; // Clear active training ID
+            currentTrainingIdForModal = null;
         }
     });
 
-    // --- Edit Training from Modal ---
+    // --- Edit Training from Modal (remains the same) ---
     editTrainingBtn.addEventListener('click', () => {
         if (currentTrainingIdForModal) {
             const sessionToEdit = trainingSessions.find(s => s.id === currentTrainingIdForModal);
             if (sessionToEdit) {
-                // Populate the entry form with session data
                 document.getElementById('training-id').value = sessionToEdit.id;
                 document.getElementById('training-date').value = sessionToEdit.date || '';
                 document.getElementById('training-title').value = sessionToEdit.title || '';
                 document.getElementById('location').value = sessionToEdit.location || '';
-                document.getElementById('sail-hours').value = sessionToEdit.sailHours || 0; // Set to 0 if null/undefined
+                document.getElementById('sail-hours').value = sessionToEdit.sailHours || 0;
                 document.getElementById('wind-direction').value = sessionToEdit.windDirection || '';
                 document.getElementById('wind-strength').value = sessionToEdit.windStrength || 0;
                 document.getElementById('sea-state').value = sessionToEdit.seaState || '';
@@ -512,9 +536,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('next-steps').value = sessionToEdit.nextSteps || '';
                 document.getElementById('notes').value = sessionToEdit.notes || '';
 
-                // Populate polar diagram sliders and their value displays
                 polarDiagramLabels.forEach(label => {
-                    const fieldId = getPolarIdFromLabel(label); // Use helper for consistent ID
+                    const fieldId = getPolarIdFromLabel(label);
                     const inputElement = document.getElementById(fieldId);
                     if (inputElement) {
                         inputElement.value = sessionToEdit.polarValues[fieldId] !== undefined ? sessionToEdit.polarValues[fieldId] : 0;
@@ -522,13 +545,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (valueSpan) valueSpan.textContent = inputElement.value;
                     }
                 });
-                updateInteractivePolarDiagram(); // Redraw interactive diagram with loaded values
+                updateInteractivePolarDiagram();
 
-                saveTrainingBtn.innerHTML = '<i class="fas fa-save"></i> Training aktualisieren'; // Update button text
-                cancelEditBtn.classList.remove('hidden'); // Show cancel button
+                saveTrainingBtn.innerHTML = '<i class="fas fa-save"></i> Training aktualisieren';
+                cancelEditBtn.classList.remove('hidden');
 
-                diagramModal.style.display = 'none'; // Close modal
-                document.querySelector('.tab-button[data-tab="entry"]').click(); // Switch to Entry tab
+                diagramModal.style.display = 'none';
+                document.querySelector('.tab-button[data-tab="entry"]').click();
             } else {
                 console.error('Session to edit not found:', currentTrainingIdForModal);
                 alert('Fehler: Das zu bearbeitende Training wurde nicht gefunden.');
@@ -536,20 +559,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Delete Training from Modal ---
+    // --- Delete Training from Modal (remains the same) ---
     deleteTrainingBtn.addEventListener('click', () => {
         if (currentTrainingIdForModal && confirm('Sind Sie sicher, dass Sie dieses Training löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
             trainingSessions = trainingSessions.filter(s => s.id !== currentTrainingIdForModal);
             saveTrainingSessions();
-            renderTrainingGallery(); // Re-render gallery after deletion
+            renderTrainingGallery();
             diagramModal.style.display = 'none';
-            currentTrainingIdForModal = null; // Clear active training ID
+            currentTrainingIdForModal = null;
             alert('Training erfolgreich gelöscht.');
+            updateActivityStatus(); // Update analysis after deletion
         }
     });
 
 
-    // --- Search Functionality ---
+    // --- Search Functionality (remains the same) ---
     performSearchBtn.addEventListener('click', () => {
         const searchTerm = searchInput.value.toLowerCase().trim();
         if (searchTerm === '') {
@@ -558,7 +582,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const filteredSessions = trainingSessions.filter(session => {
-            // Check all relevant text fields for the search term
             const searchableFields = [
                 session.title,
                 session.location,
@@ -574,32 +597,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 session.whatLearned,
                 session.nextSteps,
                 session.notes,
-                session.date // Date string can be searched directly for exact matches or parts
+                session.date
             ];
-            // Add numeric fields converted to string for search
             if (session.sailHours) searchableFields.push(String(session.sailHours));
             if (session.windStrength) searchableFields.push(String(session.windStrength));
             if (session.speed) searchableFields.push(String(session.speed));
             if (session.performance) searchableFields.push(String(session.performance));
 
-            // Also search within polarValues (by value or by the label)
             for (const key in session.polarValues) {
                 if (session.polarValues.hasOwnProperty(key)) {
-                    searchableFields.push(String(session.polarValues[key])); // Search by numeric value
+                    searchableFields.push(String(session.polarValues[key]));
                     const originalLabel = polarDiagramLabels.find(l => getPolarIdFromLabel(l) === key);
-                    if (originalLabel) searchableFields.push(originalLabel); // Search by the label name itself
+                    if (originalLabel) searchableFields.push(originalLabel);
                 }
             }
-
 
             return searchableFields.some(field =>
                 field && String(field).toLowerCase().includes(searchTerm)
             );
         });
-        renderTrainingGallery(filteredSessions, searchResultsDiv); // Render results in searchResultsDiv
+        renderTrainingGallery(filteredSessions, searchResultsDiv);
     });
 
-    // --- Export/Import Functionality ---
+    // --- Export/Import Functionality (remains the same) ---
     exportDataBtn.addEventListener('click', () => {
         const dataStr = JSON.stringify(trainingSessions, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
@@ -621,14 +641,12 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // Basic validation for imported data structure (check if it's an array of objects with 'id', 'date', 'title')
                     if (Array.isArray(importedData) && importedData.every(item => typeof item === 'object' && item !== null && 'id' in item && 'date' in item && 'title' in item)) {
-                        // Option: Merge or replace. Here, we replace for simplicity.
                         trainingSessions = importedData;
                         saveTrainingSessions();
                         alert('Daten erfolgreich importiert!');
-                        // Switch to gallery tab to show imported data
                         document.querySelector('.tab-button[data-tab="gallery"]').click();
+                        updateActivityStatus(); // Update analysis after import
                     } else {
                         alert('Ungültiges Datenformat. Bitte eine gültige JSON-Datei mit Trainingsdaten importieren. Erwartetes Format: Array von Objekten mit id, date, title.');
                     }
@@ -636,22 +654,198 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Fehler beim Parsen der JSON-Datei: ' + error.message);
                     console.error("Import error:", error);
                 } finally {
-                    importDataInput.value = ''; // Clear the file input for security and re-import
+                    importDataInput.value = '';
                 }
             };
             reader.readAsText(file);
         }
     });
 
+    // --- NEW: Event Management Functions ---
+    eventEntryForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const newEvent = {
+            id: Date.now(),
+            title: eventTitleInput.value,
+            date: new Date(eventDateInput.value + (eventTimeInput.value ? `T${eventTimeInput.value}` : '')), // Combine date and time
+            location: eventLocationInput.value || '',
+            time: eventTimeInput.value || ''
+        };
+
+        upcomingEvents.push(newEvent);
+        saveUpcomingEvents();
+        renderEventsList();
+        updateNextEventCountdown();
+        eventEntryForm.reset();
+        alert('Event erfolgreich hinzugefügt!');
+    });
+
+    function renderEventsList() {
+        eventsListDiv.innerHTML = ''; // Clear previous events
+        noEventsMessage.classList.add('hidden'); // Hide default message initially
+
+        const now = new Date();
+        const futureEvents = upcomingEvents.filter(event => event.date >= now);
+
+        if (futureEvents.length === 0) {
+            noEventsMessage.classList.remove('hidden'); // Show message if no events
+            return;
+        }
+
+        // Sort events by date ascending
+        futureEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+        futureEvents.forEach(event => {
+            const eventCard = document.createElement('div');
+            eventCard.classList.add('event-card');
+            eventCard.dataset.id = event.id;
+
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit' };
+            const eventDateStr = event.date.toLocaleDateString('de-DE', dateOptions);
+            const eventTimeStr = event.hasTime ? event.date.toLocaleTimeString('de-DE', timeOptions) : (event.time || '');
+
+            eventCard.innerHTML = `
+                <h3>${event.title}</h3>
+                <p><strong>Datum:</strong> ${eventDateStr}</p>
+                ${eventTimeStr ? `<p><strong>Zeit:</strong> ${eventTimeStr} Uhr</p>` : ''}
+                ${event.location ? `<p><strong>Ort:</strong> ${event.location}</p>` : ''}
+                <div class="event-actions">
+                    <button class="delete-event-btn"><i class="fas fa-trash-alt"></i> Löschen</button>
+                </div>
+            `;
+            eventsListDiv.appendChild(eventCard);
+        });
+
+        // Attach delete listeners
+        eventsListDiv.querySelectorAll('.delete-event-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const eventId = parseInt(e.target.closest('.event-card').dataset.id);
+                if (confirm('Sicher, dass du dieses Event löschen möchtest?')) {
+                    upcomingEvents = upcomingEvents.filter(event => event.id !== eventId);
+                    saveUpcomingEvents();
+                    renderEventsList(); // Re-render the list
+                    updateNextEventCountdown(); // Update countdown as well
+                    alert('Event gelöscht.');
+                }
+            });
+        });
+    }
+
+    // --- NEW: Next Event Countdown ---
+    function updateNextEventCountdown() {
+        // Clear existing interval to prevent multiple timers
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        const now = new Date();
+        const sortedEvents = upcomingEvents.filter(event => event.date >= now).sort((a, b) => a.date.getTime() - b.date.getTime());
+
+        if (sortedEvents.length > 0) {
+            const nextEvent = sortedEvents[0];
+            nextEventCountdownBar.classList.remove('hidden');
+            nextEventTitleSpan.textContent = nextEvent.title;
+
+            // Update countdown every second
+            countdownInterval = setInterval(() => {
+                const timeDiff = nextEvent.date.getTime() - new Date().getTime();
+
+                if (timeDiff <= 0) {
+                    countdownTimerSpan.textContent = 'Ist jetzt!';
+                    clearInterval(countdownInterval);
+                    // Re-render events after the event has passed to remove it from upcoming
+                    renderEventsList();
+                    updateNextEventCountdown(); // Check for the *new* next event
+                    return;
+                }
+
+                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                let countdownText = '';
+                if (days > 0) countdownText += `${days}d `;
+                if (hours > 0 || days > 0) countdownText += `${hours}h `;
+                if (minutes > 0 || hours > 0 || days > 0) countdownText += `${minutes}m `;
+                countdownText += `${seconds}s`;
+
+                countdownTimerSpan.textContent = `noch ${countdownText}`;
+            }, 1000);
+
+        } else {
+            nextEventCountdownBar.classList.add('hidden');
+            nextEventTitleSpan.textContent = '';
+            countdownTimerSpan.textContent = '';
+        }
+    }
+
+    // --- NEW: Analysis Functions ---
+    function updateActivityStatus() {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        sevenDaysAgo.setHours(0, 0, 0, 0); // Set to start of the day
+
+        const trainingsLast7Days = trainingSessions.filter(session => {
+            const sessionDate = new Date(session.date);
+            sessionDate.setHours(0, 0, 0, 0); // Normalize to start of the day
+            return sessionDate >= sevenDaysAgo;
+        });
+
+        activityStatusDiv.innerHTML = ''; // Clear previous status
+        activityStatusDiv.classList.remove('active-status', 'inactive-status');
+
+        if (trainingsLast7Days.length <= 2) {
+            activityStatusDiv.classList.add('inactive-status');
+            activityStatusDiv.innerHTML = '<i class="fas fa-times-circle"></i> You can Sail more to Sail better!';
+        } else {
+            activityStatusDiv.classList.add('active-status');
+            activityStatusDiv.innerHTML = '<i class="fas fa-check-circle"></i> You\'re active at the moment. Great!';
+        }
+    }
+
+    // --- NEW: Copy 30-day data & Open Copilot ---
+    copy30DayDataBtn.addEventListener('click', async () => {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        thirtyDaysAgo.setHours(0, 0, 0, 0); // Set to start of the day
+
+        const trainingsLast30Days = trainingSessions.filter(session => {
+            const sessionDate = new Date(session.date);
+            sessionDate.setHours(0, 0, 0, 0); // Normalize to start of the day
+            return sessionDate >= thirtyDaysAgo;
+        });
+
+        if (trainingsLast30Days.length === 0) {
+            alert('Keine Trainings in den letzten 30 Tagen gefunden, die kopiert werden könnten.');
+            return;
+        }
+
+        const dataToCopy = JSON.stringify(trainingsLast30Days, null, 2);
+
+        try {
+            await navigator.clipboard.writeText(dataToCopy);
+            alert('Trainingsdaten der letzten 30 Tage wurden in die Zwischenablage kopiert. Copilot wird geöffnet.');
+            window.open('https://copilot.microsoft.com/', '_blank');
+        } catch (err) {
+            console.error('Fehler beim Kopieren der Daten:', err);
+            alert('Fehler beim Kopieren der Daten. Bitte versuchen Sie es manuell oder stellen Sie sicher, dass die Berechtigung für die Zwischenablage erteilt wurde.');
+        }
+    });
+
+
     // --- Initial Load Operations ---
     loadTrainingSessions();
+    loadUpcomingEvents();
+    updateNextEventCountdown(); // Initialize countdown on load
+
     // Determine which tab to open initially
     if (trainingSessions.length > 0) {
-        // If data exists, show gallery tab
         document.querySelector('.tab-button[data-tab="gallery"]').click();
     } else {
-        // Otherwise, default to entry tab
         document.querySelector('.tab-button[data-tab="entry"]').click();
     }
-    // The .click() above handles the initial rendering and diagram updates
+    // The .click() above handles the initial rendering and diagram updates, and now also analysis/events
 });
