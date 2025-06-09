@@ -29,9 +29,20 @@
         <button class="tab-button" data-tab="search">
             <i class="fas fa-search"></i> Suche
         </button>
+        <button class="tab-button" data-tab="events">
+            <i class="fas fa-calendar-alt"></i> Events
+        </button>
+        <button class="tab-button" data-tab="analysis">
+            <i class="fas fa-chart-bar"></i> Analyse
+        </button>
     </nav>
 
     <main class="tab-content-container">
+        <div id="next-event-countdown" class="next-event-countdown-bar hidden">
+            <span>Nächstes Event: <strong id="next-event-title"></strong></span>
+            <span id="countdown-timer"></span>
+        </div>
+
         <section id="entry" class="tab-content active">
             <h2>Neues Training eintragen</h2>
             <form id="training-entry-form">
@@ -213,7 +224,7 @@
         <section id="gallery" class="tab-content">
             <h2>Vergangene Trainings</h2>
             <div id="training-list" class="gallery-grid">
-                </div>
+            </div>
             <div class="gallery-controls">
                 <button id="export-data"><i class="fas fa-file-export"></i> Daten exportieren</button>
                 <input type="file" id="import-data" accept=".json" style="display: none;">
@@ -230,8 +241,56 @@
             </div>
 
             <div id="search-results" class="gallery-grid">
-                </div>
+            </div>
         </section>
+
+        <section id="events" class="tab-content">
+            <h2><i class="fas fa-calendar-plus"></i> Events verwalten</h2>
+            <form id="event-entry-form" class="form-card">
+                <div class="form-section-header">Neues Event hinzufügen</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="event-title"><i class="fas fa-heading"></i> Event Name:</label>
+                        <input type="text" id="event-title" required placeholder="z.B. Regatta Kieler Woche">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date"><i class="fas fa-calendar-alt"></i> Datum:</label>
+                        <input type="date" id="event-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-time"><i class="fas fa-clock"></i> Zeit (optional):</label>
+                        <input type="time" id="event-time">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-location"><i class="fas fa-map-marker-alt"></i> Ort (optional):</label>
+                        <input type="text" id="event-location" placeholder="z.B. Kieler Förde">
+                    </div>
+                </div>
+                <button type="submit"><i class="fas fa-plus-circle"></i> Event hinzufügen</button>
+            </form>
+
+            <div class="form-section-header" style="margin-top: 40px;"><i class="fas fa-list"></i> Kommende Events</div>
+            <div id="events-list" class="gallery-grid">
+                <p class="empty-message" id="no-events-message">Keine kommenden Events gefunden. Füge ein Event hinzu!</p>
+            </div>
+        </section>
+
+        <section id="analysis" class="tab-content">
+            <h2><i class="fas fa-chart-line"></i> Trainingsanalyse</h2>
+
+            <div class="analysis-section">
+                <h3><i class="fas fa-calendar-week"></i> Aktivitätsstatus der letzten 7 Tage</h3>
+                <div id="activity-status" class="activity-status-display">
+                </div>
+            </div>
+
+            <div class="analysis-section">
+                <h3><i class="fas fa-copy"></i> Daten für Copilot</h3>
+                <p>Kopieren Sie Ihre Trainingsdaten der letzten 30 Tage, um sie in Copilot zu analysieren.</p>
+                <button id="copy-30-day-data-btn"><i class="fas fa-copy"></i> Trainingsdaten der letzten 30 Tage kopieren & Copilot öffnen</button>
+            </div>
+        </section>
+
     </main>
 
     <div id="diagram-modal" class="modal">
