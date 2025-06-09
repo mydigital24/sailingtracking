@@ -5,8 +5,8 @@ const urlsToCache = [
     'style.css',
     'script.js',
     'manifest.json',
-    'icons/icon-192x192.png', // Make sure these paths are correct
-    'icons/icon-512x512.png',
+    'icon-192x192.png', // Make sure these paths are correct
+    'icon-512x512.png',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css' // Cache Font Awesome
 ];
 
